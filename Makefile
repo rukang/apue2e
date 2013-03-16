@@ -1,5 +1,5 @@
 DIRS = lib sockets advio call calld daemons datafiles db environ exercises \
-	file ipc ipp lock mycat open opend opend.fe open.fe proc pty \
+	file ipc lock mycat open opend opend.fe open.fe proc pty \
 	sess signals std stdio streams termios threadctl threads $(wildcard local*)
 
 export WKDIR   = $(CURDIR)
