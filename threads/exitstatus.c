@@ -12,7 +12,7 @@ void *
 thr_fn2(void *arg)
 {
 	printf("thread 2 exiting\n");
-	pthread_exit((void *)2);
+	pthread_exit((void *)2);/*pass value instead of using the argument to share memory between parent and child thread*/
 }
 
 int
@@ -22,19 +22,25 @@ main(void)
 	pthread_t	tid1, tid2;
 	void		*tret;
 
-	err = pthread_create(&tid1, NULL, thr_fn1, NULL);
+	err = pthread_create(&tid1, NULL, thr_fn1, NULL);/*pass value instead of using the argument to share memory between parent and child thread*/
 	if (err != 0)
 		err_quit("can't create thread 1: %s\n", strerror(err));
+
 	err = pthread_create(&tid2, NULL, thr_fn2, NULL);
 	if (err != 0)
 		err_quit("can't create thread 2: %s\n", strerror(err));
-	err = pthread_join(tid1, &tret);
-	if (err != 0)
-		err_quit("can't join with thread 1: %s\n", strerror(err));
-	printf("thread 1 exit code %d\n", (int)tret);
+
+/*does the  order of 2 pthread_join matter? yes and no. yes as followed logic is effected, no as the collection of the child threads is reliable which is garateed by the os and pthread lib*/
+
 	err = pthread_join(tid2, &tret);
 	if (err != 0)
 		err_quit("can't join with thread 2: %s\n", strerror(err));
 	printf("thread 2 exit code %d\n", (int)tret);
+
+	err = pthread_join(tid1, &tret);
+	if (err != 0)
+		err_quit("can't join with thread 1: %s\n", strerror(err));
+	printf("thread 1 exit code %d\n", (int)tret);
+
 	exit(0);
 }
